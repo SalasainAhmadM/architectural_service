@@ -8,8 +8,7 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link rel="icon" type="image/x-icon" href="./img/archi_logo.png">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -110,9 +109,18 @@
 
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
+        <style>
+            .navbar-logo {
+                width: 50px;
+                height: auto;
+                display: inline-block;
+            }
+        </style>
         <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary">Architectural Services</h2>
+            <img src="./img/archi_logo.png" alt="Website Logo" class="navbar-logo">
+            <h2 class="m-0 text-primary ms-2">Architectural Services</h2>
         </a>
+
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -379,10 +387,10 @@
                             <div class="col-lg-4 col-md-6 portfolio-item wow fadeInUp" data-wow-delay="<?php echo $delay; ?>s">
                                 <div class="rounded overflow-hidden">
                                     <div class="position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" src="img/<?php echo $row['service_image']; ?>" alt="">
+                                        <img class="img-fluid w-100" src="uploads/<?php echo $row['service_image']; ?>" alt="">
                                         <div class="portfolio-overlay">
                                             <a class="btn btn-square btn-outline-light mx-1"
-                                                href="img/<?php echo $row['service_image']; ?>" data-lightbox="portfolio"><i
+                                                href="uploads/<?php echo $row['service_image']; ?>" data-lightbox="portfolio"><i
                                                     class="fa fa-eye"></i></a>
                                         </div>
                                     </div>
@@ -555,10 +563,10 @@
                             <div class="col-lg-4 col-md-6 portfolio-item wow fadeInUp" data-wow-delay="<?php echo $delay; ?>s">
                                 <div class="rounded overflow-hidden">
                                     <div class="position-relative overflow-hidden">
-                                        <img class="img-fluid w-100" src="img/<?php echo $row['project_image']; ?>" alt="">
+                                        <img class="img-fluid w-100" src="uploads/<?php echo $row['project_image']; ?>" alt="">
                                         <div class="portfolio-overlay">
                                             <a class="btn btn-square btn-outline-light mx-1"
-                                                href="img/<?php echo $row['project_image']; ?>" data-lightbox="portfolio"><i
+                                                href="uploads/<?php echo $row['project_image']; ?>" data-lightbox="portfolio"><i
                                                     class="fa fa-eye"></i></a>
                                         </div>
                                     </div>

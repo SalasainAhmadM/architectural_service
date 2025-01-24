@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -357,7 +358,7 @@
                     </td>
                     <td>
 
-                        <form action="" method="post" class="header-search">
+                        <!-- <form action="" method="post" class="header-search">
 
                             <input type="search" name="search" class="input-text header-searchbar"
                                 placeholder="Search architect name or Email" list="architects">&nbsp;&nbsp;
@@ -382,7 +383,7 @@
                             <input type="Submit" value="Search" class="login-btn btn-primary btn"
                                 style="padding-left: 25px;padding-right: 25px;padding-top: 10px;padding-bottom: 10px;">
 
-                        </form>
+                        </form> -->
 
                     </td>
                     <td width="15%">

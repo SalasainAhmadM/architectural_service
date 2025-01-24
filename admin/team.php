@@ -10,7 +10,7 @@ if (isset($_SESSION["user"])) {
 }
 
 //import database
-include ("../connection.php");
+include("../connection.php");
 
 // Fetch team data
 $team_result = $database->query("SELECT * FROM team");
@@ -21,6 +21,7 @@ $team_result = $database->query("SELECT * FROM team");
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">

@@ -42,6 +42,7 @@ function formatDate($date)
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -454,11 +455,14 @@ function formatDate($date)
                                                 $serviceDate = htmlspecialchars($row['service_date'], ENT_QUOTES, 'UTF-8');
                                                 $serviceImage = htmlspecialchars($row['service_image'], ENT_QUOTES, 'UTF-8');
                                                 $formattedDate = formatDate($serviceDate);
+                                                $formattedCost = number_format((float) $serviceCost, 2, '.', ',');
+
                                                 echo "<tr>";
                                                 echo "<td>{$serviceName}</td>";
-                                                echo "<td><img style='height: 100px; width: 100px; padding: 5px;' src='../img/{$serviceImage}'></td>";
+                                                echo "<td><img style='height: 100px; width: 100px; padding: 5px;' src='../uploads/{$serviceImage}'></td>";
                                                 echo "<td>{$serviceDescription}</td>";
-                                                echo "<td>₱{$serviceCost}</td>";
+                                                echo "<td style='text-align: center'>₱{$formattedCost}</td>";
+
                                                 // echo "<td>{$formattedDate}</td>";
                                                 echo "<td>";
                                                 echo "<button class='btn-primary-soft btn button-icon edit-button' data-service-id='{$serviceId}' data-service-name='{$serviceName}' data-service-description='{$serviceDescription}' data-service-cost='{$serviceCost}' data-service-date='{$serviceDate}' data-service-image='{$serviceImage}'>";

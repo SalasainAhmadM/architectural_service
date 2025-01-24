@@ -11,7 +11,7 @@ if (isset($_SESSION["user"])) {
     header("location: ../login.php");
 }
 
-include ("../connection.php");
+include("../connection.php");
 $userrow = $database->query("select * from architect where archiemail='$useremail'");
 $userfetch = $userrow->fetch_assoc();
 $userid = $userfetch["archiid"];
@@ -31,10 +31,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['message']) && isset($_
 $clientsQuery = "SELECT * FROM client";
 $clientsResult = mysqli_query($database, $clientsQuery);
 
-// Fetch messages between architect and a specific client
+function markMessagesAsRead($selectedClientId, $userid, $database)
+{
+    $markAsReadQuery = "
+        UPDATE messages 
+        SET is_read = 1 
+        WHERE sender_id = ? 
+          AND receiver_id = ? 
+          AND is_read = 0 
+          AND sender_type = 'client'";  // Only mark messages where sender_type is 'client'
+
+    $stmt = $database->prepare($markAsReadQuery);
+    $stmt->bind_param("ii", $selectedClientId, $userid);  // Bind selectedClientId (sender) and architect (receiver)
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Main logic
 $selectedClientId = isset($_GET['client_id']) ? (int) $_GET['client_id'] : 0;
-$messagesQuery = "SELECT * FROM messages WHERE (sender_id = '$userid' AND receiver_id = '$selectedClientId') OR (sender_id = '$selectedClientId' AND receiver_id = '$userid') ORDER BY timestamp ASC";
-$messagesResult = mysqli_query($database, $messagesQuery);
+if ($selectedClientId > 0) {
+    // Call function to mark messages as read
+    markMessagesAsRead($selectedClientId, $userid, $database);
+}
+
+// Fetch messages between architect and the selected client
+$messagesQuery = "SELECT * 
+                  FROM messages 
+                  WHERE (sender_id = ? AND receiver_id = ?) 
+                     OR (sender_id = ? AND receiver_id = ?) 
+                  ORDER BY timestamp ASC";
+$stmt = $database->prepare($messagesQuery);
+$stmt->bind_param("iiii", $userid, $selectedClientId, $selectedClientId, $userid);
+$stmt->execute();
+$messagesResult = $stmt->get_result();
+$stmt->close();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_message_id'])) {
+    $deleteMessageId = (int) $_POST['delete_message_id'];
+
+    $deleteMessageQuery = "DELETE FROM messages WHERE message_id = ? AND sender_id = ? AND sender_type = 'architect'";
+    $stmt = $database->prepare($deleteMessageQuery);
+    $stmt->bind_param("ii", $deleteMessageId, $userid);
+    $stmt->execute();
+    $stmt->close();
+
+    // Refresh the page to reflect the changes
+    header("Location: message.php?client_id=$selectedClientId");
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +87,7 @@ $messagesResult = mysqli_query($database, $messagesQuery);
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -220,6 +266,33 @@ $messagesResult = mysqli_query($database, $messagesQuery);
             flex-direction: column;
         }
 
+        .chatbox-message p {
+            margin: 0;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 70%;
+        }
+
+        .chatbox-message-sender p {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            border-bottom-right-radius: 0;
+        }
+
+        .chatbox-message-receiver p {
+            background-color: #f8d7da;
+            color: #842029;
+            border-bottom-left-radius: 0;
+        }
+
+        .chatbox-timestamp {
+            font-size: 12px;
+            color: #6c757d;
+            display: block;
+            margin-top: 5px;
+        }
+
         .chatbox-messages {
             flex-grow: 1;
             overflow-y: auto;
@@ -264,6 +337,42 @@ $messagesResult = mysqli_query($database, $messagesQuery);
         .chatbox-input button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
+        }
+
+        .client-info {
+            position: relative;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .client-info span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .notification-badge {
+            background-color: #ff0000;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 3px 6px;
+            position: absolute;
+            top: -8px;
+            right: -20px;
+            transform: translateY(-50%);
+        }
+
+        .delete-message-btn {
+            background: none;
+            border: none;
+            color: #ff0000;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .delete-message-btn:hover {
+            color: #cc0000;
         }
     </style>
 </head>
@@ -412,29 +521,62 @@ $messagesResult = mysqli_query($database, $messagesQuery);
                     <h3>Select a Client to Chat With:</h3>
                     <ul>
                         <?php while ($client = mysqli_fetch_assoc($clientsResult)): ?>
+                            <?php
+                            // Query to get the count of unread messages for this client
+                            $clientId = $client['client_id'];
+                            $unreadQuery = "
+            SELECT COUNT(*) AS unread_count 
+            FROM messages 
+            WHERE sender_id = $clientId 
+              AND receiver_id = $userid 
+              AND sender_type = 'client' 
+              AND is_read = 0";
+                            $unreadResult = mysqli_query($database, $unreadQuery);
+                            $unreadCount = mysqli_fetch_assoc($unreadResult)['unread_count'];
+                            ?>
                             <li>
                                 <a href="message.php?client_id=<?php echo $client['client_id']; ?>"
                                     class="<?php echo $selectedClientId == $client['client_id'] ? 'active' : ''; ?>">
                                     <img class="client-image"
                                         src="<?php echo !empty($client['client_image']) ? $client['client_image'] : '../img/user.png'; ?>"
                                         alt="Client Image">
-                                    <?php echo $client['client_name']; ?>
+                                    <div class="client-info">
+                                        <span><?php echo $client['client_name']; ?></span>
+                                        <?php if ($unreadCount > 0): ?>
+                                            <span class="notification-badge"><?php echo $unreadCount; ?></span>
+                                        <?php endif; ?>
+                                    </div>
                                 </a>
                             </li>
                         <?php endwhile; ?>
                     </ul>
+
                 </div>
+
 
                 <div class="chatbox">
                     <div class="chatbox-messages" id="chatbox-messages">
-                        <!-- Messages will be dynamically loaded here -->
                         <?php while ($message = mysqli_fetch_assoc($messagesResult)): ?>
                             <div
-                                class="chatbox-message <?php echo $message['sender_id'] == $userid ? 'chatbox-message-sender' : 'chatbox-message-receiver'; ?>">
-                                <?php echo $message['message']; ?>
+                                class="chatbox-message <?php echo $message['sender_type'] == 'architect' ? 'chatbox-message-sender' : 'chatbox-message-receiver'; ?>">
+                                <p><?php echo $message['message']; ?></p>
+                                <span
+                                    class="chatbox-timestamp"><?php echo date('h:i A', strtotime($message['timestamp'])); ?></span>
+                                <?php if ($message['sender_type'] == 'architect'): ?>
+                                    <form method="POST" class="delete-message-form" style="display:inline;"
+                                        onsubmit="return confirm('Are you sure you want to delete this message?');">
+                                        <input type="hidden" name="delete_message_id"
+                                            value="<?php echo $message['message_id']; ?>">
+                                        <button type="submit" class="delete-message-btn">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         <?php endwhile; ?>
                     </div>
+
+
                     <div class="chatbox-input">
                         <form method="POST">
                             <textarea name="message" id="chatbox-input"
@@ -465,6 +607,24 @@ $messagesResult = mysqli_query($database, $messagesQuery);
             if (<?php echo $selectedClientId; ?> === 0) {
                 sendButton.disabled = true;
             }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const sendButton = document.getElementById("send-button");
+            const messageInput = document.getElementById("chatbox-input");
+
+            // Enable send button if text is entered
+            messageInput.addEventListener("input", function () {
+                sendButton.disabled = !messageInput.value.trim();
+            });
+
+            // Trigger send button on Enter key press
+            messageInput.addEventListener("keydown", function (event) {
+                if (event.key === "Enter" && !event.shiftKey && !sendButton.disabled) {
+                    event.preventDefault(); // Prevent new line
+                    sendButton.click(); // Trigger the send button
+                }
+            });
         });
     </script>
 </body>

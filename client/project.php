@@ -59,6 +59,7 @@ function formatDate($date)
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -442,7 +443,7 @@ function formatDate($date)
             <table border="0" width="100%" style="margin-top:25px;">
                 <tr>
                     <td width="13%">
-                        <a href="portfolio.php"><button class="login-btn btn-primary-soft btn"
+                        <a href="project.php"><button class="login-btn btn-primary-soft btn"
                                 style="padding-top:11px;padding-bottom:11px;margin-left:20px;width:125px">
                                 <i class="fa-solid fa-backward"></i>
                                 <font class="tn-in-text">Back</font>
@@ -523,12 +524,14 @@ function formatDate($date)
                                                 $projectImage = htmlspecialchars($row['project_image'], ENT_QUOTES, 'UTF-8');
                                                 $formattedstartDate = formatDate($projectstartDate);
                                                 $formattedendDate = formatDate($projectendDate);
+                                                $formattedCost = number_format((float) $projectCost, 2, '.', ',');
+
                                                 echo "<tr>";
                                                 echo "<td style='text-align: center'>{$projectName}</td>";
                                                 echo "<td style='text-align: center'> <img style='height: 100px; width: 100px; padding: 5px;' src='../uploads/{$projectImage}'></td>";
                                                 echo "<td style='text-align: center'>{$projectDescription}</td>";
                                                 // echo "<td style='text-align: center'>{$projectClient}</td>";
-                                                echo "<td style='text-align: center'>₱{$projectCost}</td>";
+                                                echo "<td style='text-align: center'>₱{$formattedCost}</td>";
                                                 echo "<td style='text-align: center'>{$formattedstartDate}</td>";
                                                 echo "<td style='text-align: center'>{$formattedendDate}</td>";
                                                 echo "<td style='text-align: center'>";
@@ -578,7 +581,7 @@ function formatDate($date)
             <h2 style="color: #008080" id="modalProjectName"></h2>
             <p><strong>Client Name:</strong> <span id="modalProjectClient"></span></p>
             <p><strong>Description:</strong> <span id="modalProjectDescription"></span></p>
-            <p><strong>Cost:</strong> ₱<span id="modalProjectCost"></span></p>
+            <p><strong>Cost:</strong> <span id="modalProjectCost"></span></p>
             <p><strong>Started Date:</strong> <span id="modalProjectStartDate"></span></p>
             <p><strong>Finished Date:</strong> <span id="modalProjectEndDate"></span></p>
             <p><strong>Project Image:</strong></p>
@@ -646,6 +649,10 @@ function formatDate($date)
             const projectEndDateElement = document.getElementById("modalProjectEndDate");
             const downloadLink = document.getElementById("downloadLink");
             const downloadLinkButton = document.getElementById("downloadLinkButton");
+            function formatCost(cost) {
+                const number = parseFloat(cost);
+                return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
 
             viewButtons.forEach(button => {
                 button.addEventListener('click', function () {
@@ -661,7 +668,7 @@ function formatDate($date)
                     projectNameElement.innerText = projectName;
                     projectClientElement.innerText = projectClient;
                     projectDescriptionElement.innerText = projectDescription;
-                    projectCostElement.innerText = projectCost;
+                    projectCostElement.innerText = "₱" + formatCost(projectCost);
                     projectStartDateElement.innerText = projectStartDate;
                     projectEndDateElement.innerText = projectEndDate;
                     projectImage.src = projectImageSrc;

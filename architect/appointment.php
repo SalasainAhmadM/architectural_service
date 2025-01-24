@@ -31,6 +31,7 @@ $archi_image = $userfetch["archi_image"];
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -519,7 +520,8 @@ $archi_image = $userfetch["archi_image"];
                                                 echo "<td>" . htmlspecialchars($row["title"]) . "</td>";
                                                 // echo "<td>" . $scheduledDateFormatted . " @ " . $scheduledTimeFormatted . "</td>";
                                                 echo "<td>" . $appodateFormatted . "</td>";
-                                                echo "<td>₱" . htmlspecialchars($row["cost"] * 0.7) . "</td>";
+                                                echo "<td>₱" . number_format((float) $row["cost"] * 0.7, 2, '.', ',') . "</td>";
+
 
                                                 // Dropdown for status
                                                 echo "<td>";

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -539,7 +540,34 @@
             </td>
             <tr>
                 </table>
+                <?php
+
+                // Fetch data from the `project` table
+                $sql = "SELECT service_id, service_name, service_description, service_date, service_image, service_cost FROM project";
+                $result = $database->query($sql);
+                ?>
+
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 20px;">
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <div
+                                style="width: 30%; text-align: center; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; margin-bottom: 20px;">
+                                <img src="../uploads/<?php echo $row['service_image']; ?>" alt="Image"
+                                    style="width: 100%; height: auto; border-radius: 8px;">
+                                <h3><?php echo $row['service_name']; ?></h3>
+                                <p><strong>Cost:</strong> ₱<?php echo number_format($row['service_cost'], 2); ?></p>
+                                <p><?php echo $row['service_description']; ?></p>
+                            </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <p>No services found.</p>
+                    <?php endif; ?>
+
+                    <?php $database->close(); ?>
+                </div>
+
         </div>
+
     </div>
 
     <script src="https://kit.fontawesome.com/1046de6bec.js" crossorigin="anonymous"></script>

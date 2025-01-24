@@ -42,6 +42,7 @@ function formatDate($date)
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/x-icon" href="../img/archi_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/animations.css">
     <link rel="stylesheet" href="../css/main.css">
@@ -460,12 +461,14 @@ function formatDate($date)
                                                 $projectImage = htmlspecialchars($row['project_image'], ENT_QUOTES, 'UTF-8');
                                                 $formattedstartDate = formatDate($projectstartDate);
                                                 $formattedendDate = formatDate($projectendDate);
+                                                $formattedCost = number_format((float) $projectCost, 2, '.', ',');
+
                                                 echo "<tr>";
                                                 echo "<td>{$projectName}</td>";
                                                 echo "<td><img style='height: 100px; width: 100px; padding: 5px;' src='../uploads/{$projectImage}'></td>";
                                                 echo "<td>{$projectDescription}</td>";
                                                 echo "<td>{$projectClient}</td>";
-                                                echo "<td>₱{$projectCost}</td>";
+                                                echo "<td style='text-align: center'>₱{$formattedCost}</td>";
                                                 echo "<td>{$formattedstartDate}</td>";
                                                 echo "<td>{$formattedendDate}</td>";
                                                 echo "<td>";

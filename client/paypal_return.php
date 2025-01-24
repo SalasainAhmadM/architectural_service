@@ -1,18 +1,8 @@
 <?php
-// Include your database connection
 include('../connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['payment']) && $_GET['payment'] == 'success') {
     $appoid = $_GET['appoid'];
-
-    // Debugging: Check if appoid is set correctly
-    // if (!isset($appoid)) {
-    //     echo "Error: appoid is not set.";
-    //     exit;
-    // }
-
-    // Debugging: Check if appoid is valid
-    // echo "Debug: appoid is " . htmlspecialchars($appoid) . "<br>";
 
 
     $stmt = $database->prepare("UPDATE appointment SET pay_status = 'Fully Paid' WHERE appoid = ?");
