@@ -210,7 +210,7 @@
                         <a href="appointment.php" class="menu-link">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                     </td>
                 </tr>
@@ -399,14 +399,14 @@
                                 <td>
                                     <p
                                         style="padding:10px;padding-left:48px;padding-bottom:0;font-size:23px;font-weight:700;color:#008080;">
-                                        Upcoming Appointments until Next <?php
+                                        Upcoming Projects until Next <?php
                                         echo date("l", strtotime("+1 week"));
                                         ?>
                                     </p>
                                     <p
                                         style="padding-bottom:19px;padding-left:50px;font-size:15px;font-weight:500;color:#212529e3;line-height: 20px;">
-                                        Here's Quick access to Upcoming Appointments until 7 days<br>
-                                        More details available in @Appointment section.
+                                        Here's Quick access to Upcoming Projects until 7 days<br>
+                                        More details available in @Project section.
                                     </p>
 
                                 </td>
@@ -611,7 +611,7 @@
                                 <td>
                                     <center>
                                         <a href="appointment.php" class="non-style-link"><button class="btn-primary btn"
-                                                style="width:85%">Show all Appointments</button></a>
+                                                style="width:85%">Show all Projects</button></a>
                                     </center>
                                 </td>
                                 <td>

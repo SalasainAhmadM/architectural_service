@@ -316,7 +316,7 @@ function formatDate($date)
                         <a href="appointment.php" class="menu-link">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                     </td>
                 </tr>

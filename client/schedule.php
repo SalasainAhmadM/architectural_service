@@ -457,7 +457,7 @@
                             ' . substr($archiname, 0, 30) . '
                         </div>
                         <div class="h4-search">
-                            ' . $formattedDate . '<br>Ends: <b>@' . $formattedTime . '</b> 
+                            ' . $formattedDate . '<br>Schedule Times: <b>@' . $formattedTime . '</b> 
                         </div>
                         <br>
                         <a href="booking.php?id=' . $scheduleid . '">

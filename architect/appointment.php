@@ -37,7 +37,7 @@ $archi_image = $userfetch["archi_image"];
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <title>Appointments</title>
+    <title>Projects</title>
     <style>
         .dashbord-tables,
         .architect-heade {
@@ -334,7 +334,7 @@ $archi_image = $userfetch["archi_image"];
                         <a href="appointment.php" class="menu-link-active">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                     </td>
                 </tr>
@@ -408,7 +408,7 @@ $archi_image = $userfetch["archi_image"];
                         </a>
                     </td>
                     <td>
-                        <p style="font-size: 23px;padding-left:12px;font-weight: 600;">Appointment Manager</p>
+                        <p style="font-size: 23px;padding-left:12px;font-weight: 600;">Project Manager</p>
                     </td>
                     <td width="15%">
                         <p style="font-size: 14px;color: rgb(119, 119, 119);padding: 0;margin: 0;text-align: right;">
@@ -433,7 +433,7 @@ $archi_image = $userfetch["archi_image"];
                 <tr>
                     <td colspan="4" style="padding-top:10px;width: 100%;">
                         <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">My
-                            Appointments (<?php echo $list110->num_rows; ?>)</p>
+                            Projects (<?php echo $list110->num_rows; ?>)</p>
                     </td>
                 </tr>
                 <tr>
@@ -572,7 +572,7 @@ $archi_image = $userfetch["archi_image"];
 <img src="../img/empty.png" width="25%">
 <br>
 <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn\'t find anything related to your keywords!</p>
-<a class="non-style-link" href="appointment.php"><button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Appointments &nbsp;</button></a>
+<a class="non-style-link" href="appointment.php"><button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Projects &nbsp;</button></a>
 </center>
 <br><br><br><br>
 </td>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/admin.css">
 
-    <title>Appointments</title>
+    <title>Projects</title>
     <style>
         .dashbord-tables,
         .architect-heade {
@@ -210,7 +210,7 @@
                         <a href="appointment.php" class="menu-link-active">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                     </td>
                 </tr>
@@ -247,7 +247,7 @@
 
                     </td>
                     <td>
-                        <p style="font-size: 23px;padding-left:12px;font-weight: 600;">Appointment Manager</p>
+                        <p style="font-size: 23px;padding-left:12px;font-weight: 600;">Project Manager</p>
 
                     </td>
                     <td width="15%">
@@ -289,7 +289,7 @@
                     <td colspan="4" style="padding-top:10px;width: 100%;">
 
                         <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">All
-                            Appointments (<?php echo $list110->num_rows; ?>)</p>
+                            Projects (<?php echo $list110->num_rows; ?>)</p>
                     </td>
 
                 </tr>

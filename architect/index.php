@@ -198,7 +198,7 @@
                         <a href="appointment.php" class="menu-link">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                     </td>
                 </tr>
@@ -325,7 +325,7 @@
                             You can view your daily schedule, Reach Clients Appointment at home!<br><br>
                             </p> -->
                                         <a href="appointment.php" class="non-style-link"><button class="btn-primary btn"
-                                                style="width:30%">View My Appointments</button></a>
+                                                style="width:30%">View My Projects</button></a>
                                         <br>
                                         <br>
                                     </td>

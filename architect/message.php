@@ -418,7 +418,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_message_id'])) 
                         <a href="appointment.php" class="menu-link">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                         </a>
                     </td>

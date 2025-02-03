@@ -1,6 +1,6 @@
 <?php
 session_start();
-include ("../connection.php");
+include("../connection.php");
 
 // Redirect if session is not set or user type is incorrect
 if (!isset($_SESSION["user"]) || $_SESSION["user"] == "" || $_SESSION['usertype'] != 'd') {
@@ -351,7 +351,7 @@ if ($result->num_rows > 0) {
                         <a href="appointment.php" class="menu-link">
                             <div class="menu-item">
                                 <i class="fa-solid fa-calendar-check"></i>
-                                <p>Appointments</p>
+                                <p>Projects</p>
                             </div>
                     </td>
                 </tr>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/admin.css">
 
-    <title>Appointments</title>
+    <title>Projects</title>
 </head>
 
 <body>
@@ -403,7 +403,7 @@
                                                         <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn\'t find anything related to your keywords!</p>
                                                         <a class="non-style-link" href="appointment.php">
                                                             <button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">
-                                                                &nbsp; Show all Appointments &nbsp;
+                                                                &nbsp; Show all Projects &nbsp;
                                                             </button>
                                                         </a>
                                                     </center>
