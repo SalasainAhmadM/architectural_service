@@ -189,7 +189,7 @@ $today = date('Y-m-d');
                                     <a href="../logout.php"><input type="button" value="Log out"
                                             class="logout-btn btn-primary-soft btn"></a>
                                 </td>
-                            </tr>
+                            </tr> 
                         </table>
                     </td>
                 </tr>
@@ -335,7 +335,6 @@ $today = date('Y-m-d');
                                 <table width="100%" class="sub-table scrolldown" border="0"
                                     style="padding: 50px; border: none">
                                     <tbody>
-                                    <tbody>
                                         <?php
                                         if ($_GET && isset($_GET["id"])) {
                                             $id = $_GET["id"];
@@ -352,17 +351,17 @@ $today = date('Y-m-d');
                                                 $stmtUpdate = $database->prepare($sqlUpdatePayment);
                                                 $stmtUpdate->bind_param("sii", $pay_status, $id, $userid);
                                                 if ($stmtUpdate->execute()) {
-                                                    echo '<script>Swal.fire({ title: "Success", text: "Payment status updated successfully.", icon: "success", confirmButtonText: "OK" });</script>';
+                                                    echo '<script>document.getElementById("success-modal").style.display = "block";</script>';
                                                 } else {
-                                                    echo '<script>Swal.fire({ title: "Error", text: "Error updating payment status: ' . $stmtUpdate->error . '", icon: "error", confirmButtonText: "OK" });</script>';
+                                                    echo '<div class="alert alert-danger">Error updating payment status: ' . $stmtUpdate->error . '</div>';
                                                 }
                                             }
 
                                             // Fetch schedule details
                                             $sqlmain = "SELECT * FROM schedule 
-              INNER JOIN architect ON schedule.archiid = architect.archiid 
-              WHERE schedule.scheduleid = ? 
-              ORDER BY schedule.scheduledate DESC";
+                                                    INNER JOIN architect ON schedule.archiid = architect.archiid 
+                                                    WHERE schedule.scheduleid = ? 
+                                                    ORDER BY schedule.scheduledate DESC";
                                             $stmt = $database->prepare($sqlmain);
                                             $stmt->bind_param("i", $id);
                                             $stmt->execute();
@@ -377,8 +376,8 @@ $today = date('Y-m-d');
                                             $scheduledate = date("M d, Y", strtotime($row["scheduledate"]));
                                             $scheduletime = date("g:ia", strtotime($row["scheduletime"]));
                                             $cost = $row["cost"];
-                                            $nop = $row["nop"];
-
+                                            $nop = $row["nop"]; // Number of participants allowed
+                                        
                                             // Count current number of appointments
                                             $sql2 = "SELECT COUNT(*) AS total_appointments FROM appointment WHERE scheduleid = ?";
                                             $stmt2 = $database->prepare($sql2);
@@ -396,84 +395,83 @@ $today = date('Y-m-d');
                                                 $formatted_fee = $initial_fee;
 
                                                 echo '
-          <form id="booking-form" action="booking-complete.php" method="post" onsubmit="return validateBooking();">
-              <input type="hidden" name="scheduleid" value="' . $scheduleid . '">
-              <input type="hidden" name="apponum" value="' . $apponum . '">
-              <input type="hidden" name="date" value="' . $today . '">
-              <input type="hidden" id="payment-status" value="' . $pay_status . '">
-              <td style="width: 50%;" rowspan="2">
-                  <div class="dashboard-items search-items">
-                      <div style="width:100%">
-                          <div class="h1-search" style="font-size:25px;">
-                            Session Details
-                          </div><br><br>
-                          <div class="h3-search" style="font-size:18px;line-height:30px">
-                           Architect name: &nbsp;&nbsp;<b>' . $archiname . '</b><br>
-                           Architect Email: &nbsp;&nbsp;<b>' . $archiemail . '</b>
-                          </div><br>
-                          <div class="h3-search" style="font-size:18px;">
-                           Session Title: ' . $title . '<br>
-                           Session Scheduled Date: ' . $scheduledate . '<br>
-                           Session Starts: ' . $scheduletime . '<br>
-                           Initial fee: <b>₱' . $formatted_fee . '</b>
-                          </div>
-                          <br>';
+                                                <form id="booking-form" action="booking-complete.php" method="post" onsubmit="return validateBooking();">
+                                                    <input type="hidden" name="scheduleid" value="' . $scheduleid . '">
+                                                    <input type="hidden" name="apponum" value="' . $apponum . '">
+                                                    <input type="hidden" name="date" value="' . $today . '">
+                                                    <input type="hidden" id="payment-status" value="' . $pay_status . '">
+                                                    <td style="width: 50%;" rowspan="2">
+                                                        <div class="dashboard-items search-items">
+                                                            <div style="width:100%">
+                                                                <div class="h1-search" style="font-size:25px;">
+                                                                  Session Details
+                                                                </div><br><br>
+                                                                <div class="h3-search" style="font-size:18px;line-height:30px">
+                                                                 Architect name: &nbsp;&nbsp;<b>' . $archiname . '</b><br>
+                                                                 Architect Email: &nbsp;&nbsp;<b>' . $archiemail . '</b>
+                                                                </div><br>
+                                                                <div class="h3-search" style="font-size:18px;">
+                                                                 Session Title: ' . $title . '<br>
+                                                                 Session Scheduled Date: ' . $scheduledate . '<br>
+                                                                 Session Starts: ' . $scheduletime . '<br>
+                                                                 Initial fee: <b>₱' . $formatted_fee . '</b>
+                                                                </div>
+                                                                <br>';
 
                                                 if ($pay_status === 'Pay Remaining Payment Now') {
                                                     echo '<div class="alert alert-success" role="alert">Initial Payment Successful!</div>';
                                                 } else {
                                                     echo '<div id="paypal-button-container">
-              <button type="button" class="btn btn-primary" onclick="redirectToPayPal()"><i class="fa-brands fa-paypal"></i> Pay with PayPal</button>
-              
-              </div>';
+                                                    <button type="button" class="btn btn-primary" onclick="redirectToPayPal()"><i class="fa-brands fa-paypal"></i>Pay with PayPal</button>
+                                                  </div>';
                                                 }
 
                                                 echo '
-                  </div>
-              </div>
-          </td>
-          <td style="width: 25%;">
-              <div class="dashboard-items search-items">
-                  <div style="width:100%; padding-top: 15px; padding-bottom: 15px;">
-                      <div class="h1-search" style="font-size:20px; line-height: 35px; margin-left:8px; text-align:center;">
-                          Your Appointment Number
-                      </div>
-                      <center>
-                          <div class="dashboard-icons" style="margin-left: 0px; width:90%; font-size:70px; font-weight:800; text-align:center; color:var(--btnnictext); background-color: var(--btnice)">
-                              ' . $apponum . '
-                          </div>
-                      </center>
-                  </div><br>
-              </div>
-          </td>
-      </tr>
-      <tr>
-          <td>
-              <!-- Book Now Button -->
-              <input type="submit" id="book-now-button" class="login-btn btn-primary btn btn-book" 
-              style="margin-left:10px; padding-left: 25px; padding-right: 25px; padding-top: 10px; padding-bottom: 10px; width:95%; text-align: center;" 
-              value="Book now" name="booknow">
-          </form>
-          </td>
-      </tr>';
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 25%;">
+                                                    <div class="dashboard-items search-items">
+                                                        <div style="width:100%; padding-top: 15px; padding-bottom: 15px;">
+                                                            <div class="h1-search" style="font-size:20px; line-height: 35px; margin-left:8px; text-align:center;">
+                                                                Your Appointment Number
+                                                            </div>
+                                                            <center>
+                                                                <div class="dashboard-icons" style="margin-left: 0px; width:90%; font-size:70px; font-weight:800; text-align:center; color:var(--btnnictext); background-color: var(--btnice)">
+                                                                    ' . $apponum . '
+                                                                </div>
+                                                            </center>
+                                                        </div><br>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <!-- Book Now Button -->
+                                                    <input type="submit" id="book-now-button" class="login-btn btn-primary btn btn-book" 
+                                                    style="margin-left:10px; padding-left: 25px; padding-right: 25px; padding-top: 10px; padding-bottom: 10px; width:95%; text-align: center;" 
+                                                    value="Book now" name="booknow">
+                                                </form>
+                                                </td>
+                                            </tr>';
                                             } else {
                                                 echo '
-      <tr>
-          <td colspan="2" style="text-align:center;">
-              <div class="dashboard-items search-items">
-                  <div style="width:100%; padding-top: 15px; padding-bottom: 15px;">
-                      <div class="h1-search" style="font-size:20px; line-height: 35px; margin-left:8px; text-align:center;">
-                          Booking Full
-                      </div>
-                      <center>
-                          <div class="dashboard-icons" style="margin-left: 0px; width:90%; font-size:70px; font-weight:800; text-align:center; color:red;">
-                              No more slots available.
-                          </div>
-                      </center>
-                  </div><br>
-              </div>
-          </td>
-      </tr>';
+                                            <tr>
+                                                <td colspan="2" style="text-align:center;">
+                                                    <div class="dashboard-items search-items">
+                                                        <div style="width:100%; padding-top: 15px; padding-bottom: 15px;">
+                                                            <div class="h1-search" style="font-size:20px; line-height: 35px; margin-left:8px; text-align:center;">
+                                                                Booking Full
+                                                            </div>
+                                                            <center>
+                                                                <div class="dashboard-icons" style="margin-left: 0px; width:90%; font-size:70px; font-weight:800; text-align:center; color:red;">
+                                                                    No more slots available.
+                                                                </div>
+                                                            </center>
+                                                        </div><br>
+                                                    </div>
+                                                </td>
+                                            </tr>';
                                             }
                                         }
                                         ?>
@@ -487,59 +485,19 @@ $today = date('Y-m-d');
             </table>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function redirectToPayPal() {
             window.location.href = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&business=sb-daa2k32419423@business.example.com&item_name=<?php echo urlencode($title); ?>&amount=<?php echo $formatted_fee; ?>&currency_code=PHP&return=<?php echo urlencode("http://localhost/architectural_service/client/booking.php?id=" . $scheduleid . "&payment=success"); ?>&cancel_return=<?php echo urlencode("http://localhost/architectural_service/client/booking.php?id=" . $scheduleid . "&payment=failed"); ?>";
         }
+
         function validateBooking() {
             var paymentStatus = document.getElementById('payment-status').value;
             if (paymentStatus !== 'Pay Remaining Payment Now') {
-                Swal.fire({
-                    title: 'Please complete the initial payment before booking',
-                    text: 'Choose an action below:',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Pay Now',
-                    cancelButtonText: 'Pay Later'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to PayPal
-                        redirectToPayPal();
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        // Call the separate function to handle "Pay Later"
-                        handlePayLater();
-                    }
-                });
+                alert('Please complete the initial payment before booking.');
                 return false;
             }
             return true;
         }
-        function handlePayLater() {
-            const form = document.getElementById('booking-form');
-
-            // Ensure no duplicate hidden inputs
-            let existingInput = document.querySelector('input[name="pay_status"]');
-            if (existingInput) {
-                existingInput.remove();
-            }
-
-            // Create and append a hidden input for "No Initial Payment Yet"
-            const payStatusInput = document.createElement('input');
-            payStatusInput.type = 'hidden';
-            payStatusInput.name = 'pay_status';
-            payStatusInput.value = 'No Initial Payment Yet';
-            form.appendChild(payStatusInput);
-
-            // Set form action explicitly for no payment scenario
-            form.action = "booking-no-pay.php";
-
-            // Submit the form
-            form.submit();
-        }
-
-
-
         function closeModal() {
             document.getElementById('success-modal').style.display = 'none';
         }

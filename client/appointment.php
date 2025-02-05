@@ -395,21 +395,21 @@
                                         <?php
                                         if ($result->num_rows == 0) {
                                             echo '<tr>
-                                                <td colspan="7">
-                                                    <br><br><br><br>
-                                                    <center>
-                                                        <img src="../img/empty.png" width="25%">
-                                                        <br>
-                                                        <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn\'t find anything related to your keywords!</p>
-                                                        <a class="non-style-link" href="appointment.php">
-                                                            <button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">
-                                                                &nbsp; Show all Projects &nbsp;
-                                                            </button>
-                                                        </a>
-                                                    </center>
-                                                    <br><br><br><br>
-                                                </td>
-                                            </tr>';
+        <td colspan="7">
+            <br><br><br><br>
+            <center>
+                <img src="../img/empty.png" width="25%">
+                <br>
+                <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We couldn\'t find anything related to your keywords!</p>
+                <a class="non-style-link" href="appointment.php">
+                    <button class="login-btn btn-primary-soft btn" style="display: flex;justify-content: center;align-items: center;margin-left:20px;">
+                        &nbsp; Show all Projects &nbsp;
+                    </button>
+                </a>
+            </center>
+            <br><br><br><br>
+        </td>
+    </tr>';
                                         } else {
                                             for ($x = 0; $x < ($result->num_rows); $x++) {
                                                 echo "<tr>";
@@ -434,45 +434,56 @@
                                                         break;
                                                     }
 
-                                                    $balance = $pay_status === "Fully Paid" ? "₱0.00" : "₱" . number_format($cost * 0.7, 2);
-                                                    $pay_button_text = $pay_status === "Fully Paid" ? "Fully Paid ☑" : "Pay Remaining Payment Now";
+                                                    if ($pay_status === "Fully Paid") {
+                                                        $balance = "₱0.00";
+                                                        $pay_button_text = "Fully Paid ☑";
+                                                    } elseif ($pay_status === "No Initial Payment Yet") {
+                                                        $balance = "₱" . number_format($cost * 0.3, 2); // Show 30% of total cost
+                                                        $pay_button_text = "Pay Initial Payment";
+                                                        $payment_amount = $cost * 0.3; // Send only 30% to PayPal
+                                                        $next_status = "Pay Remaining Payment Now"; // Update status after payment
+                                                    } else {
+                                                        $balance = "₱" . number_format($cost * 0.7, 2);
+                                                        $pay_button_text = "Pay Remaining Payment Now";
+                                                        $payment_amount = $cost * 0.7; // Send remaining 70% to PayPal
+                                                    }
 
                                                     echo '
-                                                    <td style="width: 25%;">
-                                                        <div class="dashboard-items search-items">
-                                                            <div style="width:100%;">
-                                                                <div class="h3-search">
-                                                                    Booking Date: ' . $appodate . '<br>
-                                                                    Reference Number: OC-000-' . $appoid . '
-                                                                </div>
-                                                                <div class="h1-search">
-                                                                    ' . substr($title, 0, 21) . '<br>
-                                                                </div>
-                                                                <div class="h3-search">
-                                                                    Appointment Number:<div class="h1-search">0' . $apponum . '</div>
-                                                                </div>
-                                                                <div class="h3-search">
-                                                                    ' . substr($archiname, 0, 30) . '
-                                                                </div>
-                                                                <div class="h4-search">
-                                                                    End Date: ' . $scheduledate . '<br>Starts: <b>@' . $scheduletime . '</b> 
-                                                                </div>
-                                                                <div class="h2-search">
-                                                                    ' . $status . '
-                                                                </div>
-                                                                <div style="margin-bottom: 5px;" class="h3-search">
-                                                                    Balance: ' . $balance . '
-                                                                </div>
-                                                                 <div class="h1-search">
-                                                                    <button style="font-size: 16px; margin-left: 4px;" class="login-btn btn-primary-soft btn pay-now-btn" onclick="' . ($pay_status !== "Fully Paid" ? 'redirectToPayPal(\'' . $appoid . '\', \'' . addslashes($title) . '\', \'' . $cost * 0.7 . '\')' : 'showModal()') . '">
-                                                                    <i class="fa-brands fa-paypal"></i>
-                                                                        ' . $pay_button_text . '
-                                                                    </button>
-                                                                </div>
-                                                                <br>
-                                                            </div>
-                                                        </div>
-                                                    </td>';
+            <td style="width: 25%;">
+                <div class="dashboard-items search-items">
+                    <div style="width:100%;">
+                        <div class="h3-search">
+                            Booking Date: ' . $appodate . '<br>
+                            Reference Number: OC-000-' . $appoid . '
+                        </div>
+                        <div class="h1-search">
+                            ' . substr($title, 0, 21) . '<br>
+                        </div>
+                        <div class="h3-search">
+                            Appointment Number:<div class="h1-search">0' . $apponum . '</div>
+                        </div>
+                        <div class="h3-search">
+                            ' . substr($archiname, 0, 30) . '
+                        </div>
+                        <div class="h4-search">
+                            End Date: ' . $scheduledate . '<br>Starts: <b>@' . $scheduletime . '</b> 
+                        </div>
+                        <div class="h2-search">
+                            ' . $status . '
+                        </div>
+                        <div style="margin-bottom: 5px;" class="h3-search">
+                            Balance: ' . $balance . '
+                        </div>
+                        <div class="h1-search">
+                            <button style="font-size: 16px; margin-left: 4px;" class="login-btn btn-primary-soft btn pay-now-btn" onclick="' . ($pay_status !== "Fully Paid" ? 'redirectToPayPal(\'' . $appoid . '\', \'' . addslashes($title) . '\', \'' . $payment_amount . '\', \'' . ($pay_status === "No Initial Payment Yet" ? $next_status : '') . '\')' : 'showModal()') . '">
+                                <i class="fa-brands fa-paypal"></i>
+                                ' . $pay_button_text . '
+                            </button>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </td>';
                                                 }
                                                 echo "</tr>";
                                             }
@@ -545,8 +556,15 @@
     </div>
     </div>
     <script>
-        function redirectToPayPal(appoid, title, amount) {
-            var returnUrl = "http://localhost/architectural_service/client/paypal_return.php?appoid=" + encodeURIComponent(appoid) + "&payment=success";
+        function redirectToPayPal(appoid, title, amount, isInitialPayment = false) {
+            var returnUrl;
+
+            if (isInitialPayment) {
+                returnUrl = "http://localhost/architectural_service/client/paypal_return_initial.php?appoid=" + encodeURIComponent(appoid) + "&payment=success";
+            } else {
+                returnUrl = "http://localhost/architectural_service/client/paypal_return.php?appoid=" + encodeURIComponent(appoid) + "&payment=success";
+            }
+
             var cancelUrl = "http://localhost/architectural_service/client/appointment.php?appoid=" + encodeURIComponent(appoid) + "&payment=failed";
 
             window.location.href = "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&business=sb-daa2k32419423@business.example.com&item_name=" + encodeURIComponent(title) + "&amount=" + amount + "&currency_code=PHP&return=" + encodeURIComponent(returnUrl) + "&cancel_return=" + encodeURIComponent(cancelUrl);

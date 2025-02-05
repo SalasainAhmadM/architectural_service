@@ -17,7 +17,7 @@ if (isset($_SESSION["user"])) {
 
 
 //import database
-include ("../connection.php");
+include("../connection.php");
 $sqlmain = "select * from client where client_email=?";
 $stmt = $database->prepare($sqlmain);
 $stmt->bind_param("s", $useremail);
@@ -33,12 +33,16 @@ if ($_POST) {
         $apponum = $_POST["apponum"];
         $scheduleid = $_POST["scheduleid"];
         $date = $_POST["date"];
-        $scheduleid = $_POST["scheduleid"];
-        $sql2 = "insert into appointment(client_id,apponum,scheduleid,appodate) values ($userid,$apponum,$scheduleid,'$date')";
-        $result = $database->query($sql2);
-        //echo $apponom;
-        header("location: appointment.php?action=booking-added&id=" . $apponum . "&titleget=none");
+        $pay_status = isset($_POST["pay_status"]) ? $_POST["pay_status"] : 'Pay Remaining Payment Now';
 
+        $sql2 = "INSERT INTO appointment (client_id, apponum, scheduleid, appodate, pay_status) 
+                 VALUES (?, ?, ?, ?, ?)";
+        $stmt = $database->prepare($sql2);
+        $stmt->bind_param("iiiss", $userid, $apponum, $scheduleid, $date, $pay_status);
+        $stmt->execute();
+
+        header("location: appointment.php?action=booking-added&id=" . $apponum . "&titleget=none");
     }
 }
+
 ?>
